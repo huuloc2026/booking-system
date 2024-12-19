@@ -1,16 +1,17 @@
-import { Module } from '@nestjs/common';
+import { Module, ValidationPipe } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
-import { EventsModule } from './events/events.module';
-import { TicketsModule } from './tickets/tickets.module';
-import { BookingsModule } from './bookings/bookings.module';
-import { AdminsModule } from './admins/admins.module';
+import { PrismaService } from './prisma.service';
+import { AuthService } from './auth/auth.service';
+import { APP_PIPE } from '@nestjs/core';
 
 @Module({
-  imports: [AuthModule, UsersModule, EventsModule, TicketsModule, BookingsModule, AdminsModule],
+  imports: [AppModule, AuthModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,PrismaService,{
+    provide: APP_PIPE,
+    useClass: ValidationPipe
+  }],
 })
 export class AppModule {}
